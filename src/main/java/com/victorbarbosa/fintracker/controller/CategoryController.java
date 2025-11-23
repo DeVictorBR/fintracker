@@ -7,6 +7,7 @@ import com.victorbarbosa.fintracker.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -24,6 +25,7 @@ public class CategoryController {
     }
 
     @PostMapping
+    @PreAuthorize("hasAuthority('category:create')")
     public ResponseEntity<CategoryCreateResponse> create(@RequestBody @Valid CategoryCreateRequest req, Authentication auth) {
         var response = categoryService.create(req, auth);
         URI location = ServletUriComponentsBuilder
@@ -35,12 +37,14 @@ public class CategoryController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('category:read')")
     public ResponseEntity<PageResponse<CategoryCreateResponse>> findAll(Pageable pageable, Authentication auth) {
         var response = categoryService.findAll(pageable, auth);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('category:read')")
     public ResponseEntity<CategoryCreateResponse> findCategoryById(@PathVariable Long id, Authentication auth) {
         var response = categoryService.findById(id, auth);
         return ResponseEntity.ok(response);
