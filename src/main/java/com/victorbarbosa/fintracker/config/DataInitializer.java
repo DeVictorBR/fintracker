@@ -46,6 +46,27 @@ public class DataInitializer {
                 if (a.getName().endsWith("read") || a.getName().startsWith("transaction")) {
                     userAuthorities.add(a);
                 }
+                if (a.getName().endsWith("create") || a.getName().startsWith("transaction")) {
+                    userAuthorities.add(a);
+                }
+                if (a.getName().endsWith("update") || a.getName().startsWith("transaction")) {
+                    userAuthorities.add(a);
+                }
+                if (a.getName().endsWith("delete") || a.getName().startsWith("transaction")) {
+                    userAuthorities.add(a);
+                }
+                if (a.getName().endsWith("read") || a.getName().startsWith("category")) {
+                    userAuthorities.add(a);
+                }
+                if (a.getName().endsWith("create") || a.getName().startsWith("category")) {
+                    userAuthorities.add(a);
+                }
+                if (a.getName().endsWith("update") || a.getName().startsWith("category")) {
+                    userAuthorities.add(a);
+                }
+                if (a.getName().endsWith("delete") || a.getName().startsWith("category")) {
+                    userAuthorities.add(a);
+                }
             });
 
             var userRole = new Role("USER", userAuthorities);
