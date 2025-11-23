@@ -35,7 +35,7 @@ public class DbUserDetailsService implements UserDetailsService {
                 .map(Role::getName)
                 .map(String::toUpperCase)
                 .forEach(r -> authz.add(() -> "ROLE_" + r));
-        
+
         user.getRoles()
                 .stream()
                 .map(Role::getAuthorities)
@@ -44,6 +44,6 @@ public class DbUserDetailsService implements UserDetailsService {
                 .map(SimpleGrantedAuthority::new)
                 .forEach(authz::add);
 
-        return new User(user.getUsername(), user.getPassword(), authz);
+        return new User(user.getEmail(), user.getPassword(), authz);
     }
 }
