@@ -1,6 +1,7 @@
 package com.victorbarbosa.fintracker.controller;
 
 import com.victorbarbosa.fintracker.controller.dto.SignupCreateRequest;
+import com.victorbarbosa.fintracker.controller.dto.SignupCreateResponse;
 import com.victorbarbosa.fintracker.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,8 +21,8 @@ public class AuthController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody @Valid SignupCreateRequest req) {
+    public ResponseEntity<SignupCreateResponse> signup(@RequestBody @Valid SignupCreateRequest req) {
         authService.signup(req);
-        return ResponseEntity.ok("User created successfully!");
+        return ResponseEntity.ok(new SignupCreateResponse("User created successfully!"));
     }
 }
