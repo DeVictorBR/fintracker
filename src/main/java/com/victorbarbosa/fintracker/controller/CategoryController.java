@@ -39,4 +39,10 @@ public class CategoryController {
         var response = categoryService.findAll(pageable, auth);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CategoryCreateResponse> findCategoryById(@PathVariable Long id, Authentication auth) {
+        var response = categoryService.findById(id, auth);
+        return ResponseEntity.ok(response);
+    }
 }
