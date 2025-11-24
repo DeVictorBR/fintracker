@@ -66,7 +66,7 @@ public class CategoryService {
         return userRepository.findByEmail(auth.getName()).orElseThrow();
     }
 
-    private Category getCategoryByIdAndUser(Long id, User user) {
+    protected Category getCategoryByIdAndUser(Long id, User user) {
         var category = categoryRepository.findById(id)
                 .orElseThrow(() -> new CategoryNotFoundException("Category with id: " + id + " not found"));
 
