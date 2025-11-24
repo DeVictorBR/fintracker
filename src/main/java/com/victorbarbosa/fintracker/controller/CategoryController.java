@@ -58,4 +58,10 @@ public class CategoryController {
         var response = categoryService.update(req, id, auth);
         return ResponseEntity.ok(response);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable Long id, Authentication auth) {
+        categoryService.delete(id, auth);
+        return ResponseEntity.noContent().build();
+    }
 }
