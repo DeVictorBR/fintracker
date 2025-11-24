@@ -15,6 +15,7 @@ import com.victorbarbosa.fintracker.repository.UserRepository;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class CategoryService {
@@ -27,6 +28,7 @@ public class CategoryService {
         this.userRepository = userRepository;
     }
 
+    @Transactional
     public CategoryCreateResponse create(CategoryCreateRequest req, Authentication auth) {
         var user = getAuthenticatedUser(auth);
         var category = CategoryMapper.from(req, user);
@@ -47,6 +49,7 @@ public class CategoryService {
         return CategoryMapper.to(category);
     }
 
+    @Transactional
     public CategoryUpdateResponse update(CategoryUpdateRequest req, Long id, Authentication auth) {
         var user = getAuthenticatedUser(auth);
         var category = getCategoryByIdAndUser(id, user);
@@ -56,6 +59,7 @@ public class CategoryService {
         return CategoryMapper.toUp(savedCaegory);
     }
 
+    @Transactional
     public void delete(Long id, Authentication auth) {
         var user = getAuthenticatedUser(auth);
         var category = getCategoryByIdAndUser(id, user);
