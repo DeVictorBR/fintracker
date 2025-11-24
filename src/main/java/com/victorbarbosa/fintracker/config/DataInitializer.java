@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Configuration
 public class DataInitializer {
@@ -38,36 +40,24 @@ public class DataInitializer {
             authorities.add(new Authority(null, Authority.Values.SETTINGS_UPDATE));
 
             authorityRepository.saveAll(authorities);
+            authorityRepository.flush();
 
             var allAuthorities = new HashSet<>(authorities);
 
-            var userAuthorities = new HashSet<Authority>();
-            authorities.forEach(a -> {
-                if (a.getName().endsWith("read") || a.getName().startsWith("transaction")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("create") || a.getName().startsWith("transaction")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("update") || a.getName().startsWith("transaction")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("delete") || a.getName().startsWith("transaction")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("read") || a.getName().startsWith("category")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("create") || a.getName().startsWith("category")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("update") || a.getName().startsWith("category")) {
-                    userAuthorities.add(a);
-                }
-                if (a.getName().endsWith("delete") || a.getName().startsWith("category")) {
-                    userAuthorities.add(a);
-                }
-            });
+            Set<String> userPerms = Set.of(
+                    Authority.Values.TRANSACTION_CREATE,
+                    Authority.Values.TRANSACTION_READ,
+                    Authority.Values.TRANSACTION_UPDATE,
+                    Authority.Values.TRANSACTION_DELETE,
+                    Authority.Values.CATEGORY_CREATE,
+                    Authority.Values.CATEGORY_READ,
+                    Authority.Values.CATEGORY_UPDATE,
+                    Authority.Values.CATEGORY_DELETE
+            );
+
+            Set<Authority> userAuthorities = authorities.stream()
+                    .filter(a -> userPerms.contains(a.getName()))
+                    .collect(Collectors.toSet());
 
             var userRole = new Role("USER", userAuthorities);
             var adminRole = new Role("ADMIN", allAuthorities);
