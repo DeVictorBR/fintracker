@@ -56,6 +56,12 @@ public class CategoryService {
         return CategoryMapper.toUp(savedCaegory);
     }
 
+    public void delete(Long id, Authentication auth) {
+        var user = getAuthenticatedUser(auth);
+        var category = getCategoryByIdAndUser(id, user);
+        categoryRepository.delete(category);
+    }
+
     private User getAuthenticatedUser(Authentication auth) {
         return userRepository.findByEmail(auth.getName()).orElseThrow();
     }
