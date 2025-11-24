@@ -3,7 +3,9 @@ package com.victorbarbosa.fintracker.service;
 import com.victorbarbosa.fintracker.base.PageResponse;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateRequest;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
+import com.victorbarbosa.fintracker.entity.Transaction;
 import com.victorbarbosa.fintracker.entity.User;
+import com.victorbarbosa.fintracker.exception.TransactionNotFoundException;
 import com.victorbarbosa.fintracker.mapper.PageMapper;
 import com.victorbarbosa.fintracker.mapper.TransactionMapper;
 import com.victorbarbosa.fintracker.repository.TransactionRepository;
@@ -42,7 +44,23 @@ public class TransactionService {
         return PageMapper.toPageResponse(pageResponse);
     }
 
+    public TransactionCreateResponse findById(Long id, Authentication auth) {
+        var user = getAuthenticatedUser(auth);
+        var transaction = getTransactionByIdAndUser(id, user);
+        return TransactionMapper.to(transaction);
+    }
+
     private User getAuthenticatedUser(Authentication auth) {
         return userRepository.findByEmail(auth.getName()).orElseThrow();
+    }
+
+    private Transaction getTransactionByIdAndUser(Long id, User user) {
+        var transaction = transactionRepository.findById(id)
+                .orElseThrow(() -> new TransactionNotFoundException("Transaction with id: " + id + " not found"));
+
+        if (!transaction.getUser().getId().equals(user.getId())) {
+            throw new TransactionNotFoundException("Transaction with id: " + id + " not found");
+        }
+        return transaction;
     }
 }
