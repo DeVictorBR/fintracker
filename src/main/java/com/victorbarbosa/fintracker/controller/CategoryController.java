@@ -3,6 +3,8 @@ package com.victorbarbosa.fintracker.controller;
 import com.victorbarbosa.fintracker.base.PageResponse;
 import com.victorbarbosa.fintracker.controller.dto.CategoryCreateRequest;
 import com.victorbarbosa.fintracker.controller.dto.CategoryCreateResponse;
+import com.victorbarbosa.fintracker.controller.dto.CategoryUpdateRequest;
+import com.victorbarbosa.fintracker.controller.dto.CategoryUpdateResponse;
 import com.victorbarbosa.fintracker.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -47,6 +49,13 @@ public class CategoryController {
     @PreAuthorize("hasAuthority('category:read')")
     public ResponseEntity<CategoryCreateResponse> findCategoryById(@PathVariable Long id, Authentication auth) {
         var response = categoryService.findById(id, auth);
+        return ResponseEntity.ok(response);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<CategoryUpdateResponse> updateCategory(@PathVariable Long id, Authentication auth,
+                                                                 @RequestBody @Valid CategoryUpdateRequest req) {
+        var response = categoryService.update(req, id, auth);
         return ResponseEntity.ok(response);
     }
 }
