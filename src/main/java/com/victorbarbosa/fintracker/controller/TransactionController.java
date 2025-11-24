@@ -39,4 +39,10 @@ public class TransactionController {
         var response = transactionService.findAll(auth, pageable);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<TransactionCreateResponse> findTransactionById(@PathVariable Long id, Authentication auth) {
+        var response = transactionService.findById(id, auth);
+        return ResponseEntity.ok(response);
+    }
 }
