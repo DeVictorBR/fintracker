@@ -50,6 +50,13 @@ public class TransactionService {
         return TransactionMapper.to(transaction);
     }
 
+    public PageResponse<TransactionCreateResponse> findAllTransactionsByCategory(Long categoryId, Pageable pageable, Authentication auth) {
+        var user = getAuthenticatedUser(auth);
+        var page = transactionRepository.findByUserIdAndCategoryId(user.getId(), categoryId, pageable);
+        var pageResponse = page.map(TransactionMapper::to);
+        return PageMapper.toPageResponse(pageResponse);
+    }
+
     private User getAuthenticatedUser(Authentication auth) {
         return userRepository.findByEmail(auth.getName()).orElseThrow();
     }
