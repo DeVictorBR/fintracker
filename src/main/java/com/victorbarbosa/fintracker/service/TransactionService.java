@@ -5,6 +5,7 @@ import com.victorbarbosa.fintracker.controller.dto.TransactionCreateRequest;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
 import com.victorbarbosa.fintracker.entity.Transaction;
 import com.victorbarbosa.fintracker.entity.User;
+import com.victorbarbosa.fintracker.enums.TransactionMethod;
 import com.victorbarbosa.fintracker.exception.TransactionNotFoundException;
 import com.victorbarbosa.fintracker.mapper.PageMapper;
 import com.victorbarbosa.fintracker.mapper.TransactionMapper;
@@ -66,8 +67,21 @@ public class TransactionService {
         return PageMapper.toPageResponse(pageResponse);
     }
 
+    public PageResponse<TransactionCreateResponse> findByUserIdAndType(String type, Authentication auth, Pageable pageable) {
+        var user = getAuthenticatedUser(auth);
+        var methodCast = castingTypeWhenString(type);
+        var page = transactionRepository.findByUserIdAndType(user.getId(), methodCast, pageable);
+        var pageResponse = page.map(TransactionMapper::to);
+        return PageMapper.toPageResponse(pageResponse);
+    }
+
     private User getAuthenticatedUser(Authentication auth) {
         return userRepository.findByEmail(auth.getName()).orElseThrow();
+    }
+
+    private TransactionMethod castingTypeWhenString(String method) {
+        var upper = method.toUpperCase();
+        return TransactionMethod.valueOf(upper);
     }
 
     private Transaction getTransactionByIdAndUser(Long id, User user) {
