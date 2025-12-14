@@ -70,7 +70,7 @@ public class TransactionService {
     public PageResponse<TransactionCreateResponse> findByUserIdAndType(String type, Authentication auth, Pageable pageable) {
         var user = getAuthenticatedUser(auth);
         var methodCast = castingTypeWhenString(type);
-        var page = transactionRepository.findByUserIdAndType(user.getId(), methodCast, pageable);
+        var page = transactionRepository.findByUserIdAndMethod(user.getId(), methodCast, pageable);
         var pageResponse = page.map(TransactionMapper::to);
         return PageMapper.toPageResponse(pageResponse);
     }

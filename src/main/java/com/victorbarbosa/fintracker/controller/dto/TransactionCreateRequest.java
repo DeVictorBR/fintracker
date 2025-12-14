@@ -18,7 +18,7 @@ public record TransactionCreateRequest(
         BigDecimal amount,
 
         @NotNull
-        TransactionMethod type,
+        TransactionMethod method,
 
         @NotNull
         LocalDate date,

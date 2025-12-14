@@ -23,7 +23,7 @@ public class Transaction {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TransactionMethod type;
+    private TransactionMethod method;
 
     @Column(nullable = false)
     private LocalDate date;
@@ -39,10 +39,10 @@ public class Transaction {
     public Transaction() {
     }
 
-    public Transaction(String description, BigDecimal amount, TransactionMethod type, LocalDate date, Category category, User user) {
+    public Transaction(String description, BigDecimal amount, TransactionMethod method, LocalDate date, Category category, User user) {
         this.description = description;
         this.amount = amount;
-        this.type = type;
+        this.method = method;
         this.date = date;
         this.category = category;
         this.user = user;
@@ -72,12 +72,12 @@ public class Transaction {
         this.amount = amount;
     }
 
-    public TransactionMethod getType() {
-        return type;
+    public TransactionMethod getMethod() {
+        return method;
     }
 
-    public void setType(TransactionMethod type) {
-        this.type = type;
+    public void setMethod(TransactionMethod method) {
+        this.method = method;
     }
 
     public LocalDate getDate() {
@@ -108,11 +108,11 @@ public class Transaction {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(amount, that.amount) && type == that.type && Objects.equals(date, that.date) && Objects.equals(category, that.category) && Objects.equals(user, that.user);
+        return Objects.equals(id, that.id) && Objects.equals(description, that.description) && Objects.equals(amount, that.amount) && method == that.method && Objects.equals(date, that.date) && Objects.equals(category, that.category) && Objects.equals(user, that.user);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, description, amount, type, date, category, user);
+        return Objects.hash(id, description, amount, method, date, category, user);
     }
 }

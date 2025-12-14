@@ -12,7 +12,7 @@ public class TransactionMapper {
         return new Transaction(
                 req.description(),
                 req.amount(),
-                req.type(),
+                req.method(),
                 req.date(),
                 category,
                 user
@@ -24,7 +24,7 @@ public class TransactionMapper {
                 transaction.getId(),
                 transaction.getDescription(),
                 transaction.getAmount(),
-                transaction.getType(),
+                transaction.getMethod(),
                 transaction.getDate(),
                 transaction.getCategory().getId()
         );

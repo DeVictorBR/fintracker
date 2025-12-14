@@ -9,7 +9,7 @@ public record TransactionCreateResponse(
         Long id,
         String description,
         BigDecimal amount,
-        TransactionMethod type,
+        TransactionMethod method,
         LocalDate date,
         Long categoryId
 ) {
