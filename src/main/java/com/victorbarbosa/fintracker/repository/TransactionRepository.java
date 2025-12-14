@@ -23,7 +23,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Page<Transaction> findByUserIdAndMethodAndDateBetween(
             Long userId,
-            TransactionType type,
+            TransactionMethod method,
             LocalDate start,
             LocalDate end,
             Pageable pageable
