@@ -67,4 +67,11 @@ public class TransactionController {
         var response = transactionService.findByUserIdAndDateBetween(start, end, auth, pageable);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/type")
+    @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndType(@RequestParam String type, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndType(type, auth, pageable);
+        return ResponseEntity.ok(response);
+    }
 }
