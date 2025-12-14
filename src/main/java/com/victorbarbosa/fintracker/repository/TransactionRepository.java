@@ -1,6 +1,7 @@
 package com.victorbarbosa.fintracker.repository;
 
 import com.victorbarbosa.fintracker.entity.Transaction;
+import com.victorbarbosa.fintracker.enums.TransactionMethod;
 import com.victorbarbosa.fintracker.enums.TransactionType;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +17,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long> 
 
     Page<Transaction> findByUserIdAndDateBetween(Long userId, LocalDate start, LocalDate end, Pageable pageable);
 
-    Page<Transaction> findByUserIdAndType(Long userId, TransactionType type, Pageable pageable);
+    Page<Transaction> findByUserIdAndType(Long userId, TransactionMethod type, Pageable pageable);
 
     Page<Transaction> findByUserIdAndTypeAndDateBetween(
             Long userId,
