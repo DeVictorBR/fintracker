@@ -2,8 +2,7 @@ package com.victorbarbosa.fintracker.controller.dto;
 
 import java.time.LocalDate;
 
-public record FilterTransactionMethodAndDateDto(
-        String method,
+public record FilterTransactionDateBetweenDto(
         LocalDate start,
         LocalDate end
 ) {
