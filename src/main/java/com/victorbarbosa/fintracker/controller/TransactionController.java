@@ -1,6 +1,7 @@
 package com.victorbarbosa.fintracker.controller;
 
 import com.victorbarbosa.fintracker.base.PageResponse;
+import com.victorbarbosa.fintracker.controller.dto.FilterTransactionMethodAndDateDto;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateRequest;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
 import com.victorbarbosa.fintracker.service.TransactionService;
@@ -79,6 +80,13 @@ public class TransactionController {
     @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
     public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndCategoryType(@RequestParam String type, Authentication auth, Pageable pageable) {
         var response = transactionService.findByUserIdAndCategoryType(type, auth, pageable);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/method-date")
+    @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndMethodAndDateBetween(@RequestBody FilterTransactionMethodAndDateDto dto, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndMethodAndDateBetween(dto, auth, pageable);
         return ResponseEntity.ok(response);
     }
 }
