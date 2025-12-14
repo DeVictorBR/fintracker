@@ -68,10 +68,17 @@ public class TransactionController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/method")
+    @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndType(@RequestParam String method, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndMethod(method, auth, pageable);
+        return ResponseEntity.ok(response);
+    }
+
     @GetMapping("/type")
     @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
-    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndType(@RequestParam String type, Authentication auth, Pageable pageable) {
-        var response = transactionService.findByUserIdAndType(type, auth, pageable);
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndCategoryType(@RequestParam String type, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndCategoryType(type, auth, pageable);
         return ResponseEntity.ok(response);
     }
 }
