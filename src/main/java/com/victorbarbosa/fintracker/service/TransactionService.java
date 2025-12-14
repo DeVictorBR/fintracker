@@ -15,6 +15,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
 @Service
 public class TransactionService {
 
@@ -53,6 +55,13 @@ public class TransactionService {
     public PageResponse<TransactionCreateResponse> findAllTransactionsByCategory(Long categoryId, Pageable pageable, Authentication auth) {
         var user = getAuthenticatedUser(auth);
         var page = transactionRepository.findByUserIdAndCategoryId(user.getId(), categoryId, pageable);
+        var pageResponse = page.map(TransactionMapper::to);
+        return PageMapper.toPageResponse(pageResponse);
+    }
+
+    public PageResponse<TransactionCreateResponse> findByUserIdAndDateBetween(LocalDate start, LocalDate end, Authentication auth, Pageable pageable) {
+        var user = getAuthenticatedUser(auth);
+        var page = transactionRepository.findByUserIdAndDateBetween(user.getId(), start, end, pageable);
         var pageResponse = page.map(TransactionMapper::to);
         return PageMapper.toPageResponse(pageResponse);
     }
