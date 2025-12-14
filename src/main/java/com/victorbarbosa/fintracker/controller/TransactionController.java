@@ -1,9 +1,7 @@
 package com.victorbarbosa.fintracker.controller;
 
 import com.victorbarbosa.fintracker.base.PageResponse;
-import com.victorbarbosa.fintracker.controller.dto.FilterTransactionMethodAndDateDto;
-import com.victorbarbosa.fintracker.controller.dto.TransactionCreateRequest;
-import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
+import com.victorbarbosa.fintracker.controller.dto.*;
 import com.victorbarbosa.fintracker.service.TransactionService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Pageable;
@@ -14,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
-import java.time.LocalDate;
 
 import static com.victorbarbosa.fintracker.entity.Authority.Values.TRANSACTION_CREATE;
 import static com.victorbarbosa.fintracker.entity.Authority.Values.TRANSACTION_READ;
@@ -64,8 +61,8 @@ public class TransactionController {
 
     @GetMapping("/period")
     @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
-    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndDateBetween(@RequestParam LocalDate start, @RequestParam LocalDate end, Authentication auth, Pageable pageable) {
-        var response = transactionService.findByUserIdAndDateBetween(start, end, auth, pageable);
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndDateBetween(@ModelAttribute FilterTransactionDateBetweenDto dto, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndDateBetween(dto, auth, pageable);
         return ResponseEntity.ok(response);
     }
 
@@ -85,8 +82,16 @@ public class TransactionController {
 
     @GetMapping("/method-date")
     @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
-    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndMethodAndDateBetween(@RequestBody FilterTransactionMethodAndDateDto dto, Authentication auth, Pageable pageable) {
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndMethodAndDateBetween(@ModelAttribute FilterTransactionMethodAndDateDto dto, Authentication auth, Pageable pageable) {
         var response = transactionService.findByUserIdAndMethodAndDateBetween(dto, auth, pageable);
         return ResponseEntity.ok(response);
     }
+
+    @GetMapping("/amount")
+    @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndAmountBetween(@ModelAttribute FilterTransactionAmountBetweenDto dto, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndAmountBetween(dto, auth, pageable);
+        return ResponseEntity.ok(response);
+    }
+
 }
