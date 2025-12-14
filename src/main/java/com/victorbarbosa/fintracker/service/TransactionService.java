@@ -1,9 +1,7 @@
 package com.victorbarbosa.fintracker.service;
 
 import com.victorbarbosa.fintracker.base.PageResponse;
-import com.victorbarbosa.fintracker.controller.dto.FilterTransactionMethodAndDateDto;
-import com.victorbarbosa.fintracker.controller.dto.TransactionCreateRequest;
-import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
+import com.victorbarbosa.fintracker.controller.dto.*;
 import com.victorbarbosa.fintracker.entity.Transaction;
 import com.victorbarbosa.fintracker.entity.User;
 import com.victorbarbosa.fintracker.enums.TransactionMethod;
@@ -17,8 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 @Service
 public class TransactionService {
@@ -62,9 +58,9 @@ public class TransactionService {
         return PageMapper.toPageResponse(pageResponse);
     }
 
-    public PageResponse<TransactionCreateResponse> findByUserIdAndDateBetween(LocalDate start, LocalDate end, Authentication auth, Pageable pageable) {
+    public PageResponse<TransactionCreateResponse> findByUserIdAndDateBetween(FilterTransactionDateBetweenDto dto, Authentication auth, Pageable pageable) {
         var user = getAuthenticatedUser(auth);
-        var page = transactionRepository.findByUserIdAndDateBetween(user.getId(), start, end, pageable);
+        var page = transactionRepository.findByUserIdAndDateBetween(user.getId(), dto.start(), dto.end(), pageable);
         var pageResponse = page.map(TransactionMapper::to);
         return PageMapper.toPageResponse(pageResponse);
     }
@@ -89,6 +85,13 @@ public class TransactionService {
         var user = getAuthenticatedUser(auth);
         var methodCast = castingMethodWhenString(dto.method());
         var page = transactionRepository.findByUserIdAndMethodAndDateBetween(user.getId(), methodCast, dto.start(), dto.end(), pageable);
+        var pageResponse = page.map(TransactionMapper::to);
+        return PageMapper.toPageResponse(pageResponse);
+    }
+
+    public PageResponse<TransactionCreateResponse> findByUserIdAndAmountBetween(FilterTransactionAmountBetweenDto dto, Authentication auth, Pageable pageable) {
+        var user = getAuthenticatedUser(auth);
+        var page = transactionRepository.findByUserIdAndAmountBetween(user.getId(), dto.min(), dto.max(), pageable);
         var pageResponse = page.map(TransactionMapper::to);
         return PageMapper.toPageResponse(pageResponse);
     }
