@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.time.LocalDate;
 
 import static com.victorbarbosa.fintracker.entity.Authority.Values.TRANSACTION_CREATE;
 import static com.victorbarbosa.fintracker.entity.Authority.Values.TRANSACTION_READ;
@@ -53,10 +54,17 @@ public class TransactionController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("category/{id}")
+    @GetMapping("/category/{id}")
     @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
     public ResponseEntity<PageResponse<TransactionCreateResponse>> findAllTransactionsByCategory(@PathVariable Long id, Authentication auth, Pageable pageable) {
         var response = transactionService.findAllTransactionsByCategory(id, pageable, auth);
+        return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/period")
+    @PreAuthorize("hasAuthority('" + TRANSACTION_READ + "')")
+    public ResponseEntity<PageResponse<TransactionCreateResponse>> findByUserIdAndDateBetween(@RequestParam LocalDate start, @RequestParam LocalDate end, Authentication auth, Pageable pageable) {
+        var response = transactionService.findByUserIdAndDateBetween(start, end, auth, pageable);
         return ResponseEntity.ok(response);
     }
 }
