@@ -6,6 +6,7 @@ import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
 import com.victorbarbosa.fintracker.entity.Transaction;
 import com.victorbarbosa.fintracker.entity.User;
 import com.victorbarbosa.fintracker.enums.TransactionMethod;
+import com.victorbarbosa.fintracker.enums.TransactionType;
 import com.victorbarbosa.fintracker.exception.TransactionNotFoundException;
 import com.victorbarbosa.fintracker.mapper.PageMapper;
 import com.victorbarbosa.fintracker.mapper.TransactionMapper;
@@ -67,10 +68,18 @@ public class TransactionService {
         return PageMapper.toPageResponse(pageResponse);
     }
 
-    public PageResponse<TransactionCreateResponse> findByUserIdAndType(String type, Authentication auth, Pageable pageable) {
+    public PageResponse<TransactionCreateResponse> findByUserIdAndMethod(String method, Authentication auth, Pageable pageable) {
         var user = getAuthenticatedUser(auth);
-        var methodCast = castingTypeWhenString(type);
+        var methodCast = castingMethodWhenString(method);
         var page = transactionRepository.findByUserIdAndMethod(user.getId(), methodCast, pageable);
+        var pageResponse = page.map(TransactionMapper::to);
+        return PageMapper.toPageResponse(pageResponse);
+    }
+
+    public PageResponse<TransactionCreateResponse> findByUserIdAndCategoryType(String type, Authentication auth, Pageable pageable) {
+        var user = getAuthenticatedUser(auth);
+        var typeCast = castingTypeWhenString(type);
+        var page = transactionRepository.findByUserIdAndCategory_Type(user.getId(), typeCast, pageable);
         var pageResponse = page.map(TransactionMapper::to);
         return PageMapper.toPageResponse(pageResponse);
     }
@@ -79,9 +88,14 @@ public class TransactionService {
         return userRepository.findByEmail(auth.getName()).orElseThrow();
     }
 
-    private TransactionMethod castingTypeWhenString(String method) {
+    private TransactionMethod castingMethodWhenString(String method) {
         var upper = method.toUpperCase();
         return TransactionMethod.valueOf(upper);
+    }
+
+    private TransactionType castingTypeWhenString(String type) {
+        var upper = type.toUpperCase();
+        return TransactionType.valueOf(upper);
     }
 
     private Transaction getTransactionByIdAndUser(Long id, User user) {
