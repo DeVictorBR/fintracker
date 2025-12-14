@@ -1,6 +1,7 @@
 package com.victorbarbosa.fintracker.service;
 
 import com.victorbarbosa.fintracker.base.PageResponse;
+import com.victorbarbosa.fintracker.controller.dto.FilterTransactionMethodAndDateDto;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateRequest;
 import com.victorbarbosa.fintracker.controller.dto.TransactionCreateResponse;
 import com.victorbarbosa.fintracker.entity.Transaction;
@@ -80,6 +81,14 @@ public class TransactionService {
         var user = getAuthenticatedUser(auth);
         var typeCast = castingTypeWhenString(type);
         var page = transactionRepository.findByUserIdAndCategory_Type(user.getId(), typeCast, pageable);
+        var pageResponse = page.map(TransactionMapper::to);
+        return PageMapper.toPageResponse(pageResponse);
+    }
+
+    public PageResponse<TransactionCreateResponse> findByUserIdAndMethodAndDateBetween(FilterTransactionMethodAndDateDto dto, Authentication auth, Pageable pageable) {
+        var user = getAuthenticatedUser(auth);
+        var methodCast = castingMethodWhenString(dto.method());
+        var page = transactionRepository.findByUserIdAndMethodAndDateBetween(user.getId(), methodCast, dto.start(), dto.end(), pageable);
         var pageResponse = page.map(TransactionMapper::to);
         return PageMapper.toPageResponse(pageResponse);
     }
